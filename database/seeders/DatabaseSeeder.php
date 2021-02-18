@@ -21,7 +21,7 @@ class DatabaseSeeder extends Seeder
             'birth'         => '2003-03-27',
             'gender'        => 'M',
             'email'         => 'vinicius@sistema.com',
-            'password'      => bcrypt('123456'),
+            'password'      => env('PASSWORD_HASH') ? bcrypt('123456') : '123456',
         ]);
         // \App\Models\User::factory(10)->create();
     }
