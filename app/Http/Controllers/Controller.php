@@ -12,7 +12,7 @@ class Controller extends BaseController
     use AuthorizesRequests, DispatchesJobs, ValidatesRequests;
 
     public function homepage() {
-        $variavel = "Homepage do sistema de gestão para o grupo de investismentos";
+        $variavel = "Homepage do sistema de gestão para o grupo de investimentos";
 
         return view('welcome', [
             'title' => $variavel
@@ -22,8 +22,12 @@ class Controller extends BaseController
     public function cadastrar() {
         echo "Tela de cadastro";
     }
-
-    public function login() {
-        echo "Tela de login";
+    /**
+     * Método para autenticação
+     * ===================================================================
+    */
+    public function fazerLogin() {
+        return view('user.login');
     }
+
 }

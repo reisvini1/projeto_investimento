@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Controller;
+use App\Http\Controllers\DashboardController;
 
 /*
 |--------------------------------------------------------------------------
@@ -15,5 +16,12 @@ use App\Http\Controllers\Controller;
 */
 Route::get('/', [Controller::class, 'homepage']);
 Route::get('/cadastro', [Controller::class, 'cadastrar']);
-Route::get('/login', [Controller::class, 'login']);
+
+/**
+ * Rotas para autenticação
+ * ===================================================================
+*/
+Route::get('/login', [Controller::class, 'fazerLogin']);
+Route::post('/login', [DashboardController::class, 'auth'])->name('user.login');
+Route::get('/dashboard', [DashboardController::class, 'index'])->name('user.dashboard');
 
