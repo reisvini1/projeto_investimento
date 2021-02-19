@@ -2,46 +2,57 @@
 
 namespace App\Services;
 
+use Illuminate\Database\QueryException;
+use Exception;
+use Prettus\Validator\Exceptions\ValidatorException;
+use Prettus\Validator\Contracts\ValidatorInterface;
 use App\Repositories\UserRepository;
 use App\Validators\UserValidator;
-use Prettus\Validator\Contracts\ValidatorInterface;
-use Prettus\Validator\Exceptions\ValidatorException;
 
-class UserService {
-    
-    private $repository;
-    private $validator;
-    
-    public function __construct(UserRepository $repository, UserValidator $validator) {
-        $this->repository = $repository;
-        $this->validator = $validator;
-    }
+class UserService
+{
+	private $repository;
+	private $validator;
 
-    public function store($data){
-        try {
+	public function __construct(UserRepository $repository, UserValidator $validator)
+	{
+		$this->repository 	= $repository;
+		$this->validator 	= $validator;
+	}
 
-            $this->validator->with($data)->passesOrFail(ValidatorInterface::RULE_CREATE);
-            $usuario = $this->repository->create($data);
+	public function store($data)
+	{
+		try
+		{
+			$this->validator->with($data)->passesOrFail(ValidatorInterface::RULE_CREATE);
+			$usuario = $this->repository->create($data);
 
-            return [
-                'success' => true,
-                'message' => 'Usuário cadastrado com sucesso',
-                'data' => $usuario
-            ];
+			return [
+				'success' 	=> true,
+				'messages' 	=> "Usuário cadasrado",
+				'data' 	  	=> $usuario,
+			];
+		}
+		catch(Exception $e)
+		{
+			switch(get_class($e))
+			{
+				case QueryException::class 		:  return ['success' => false, 'messages' => $e->getMessage()];
+				case ValidatorException::class 	:  return ['success' => false, 'messages' => $e->getMessageBag()];
+				case Exception::class 			:  return ['success' => false, 'messages' => $e->getMessage()];
+				default 						:  return ['success' => false, 'messages' => get_class($e)];
+			}
+		}
+	}
 
-        } catch (\Exeception $e) {
-            return [
-                'success' => false,
-                'message' => 'Erro de execução'
-            ];
-        }
-    }
+	public function update()
+	{
 
-    public function update(){
+	}
 
-    }
-    
-    public function delete(){
+	public function destroy()
+	{
 
-    }
+	}
 }
+
